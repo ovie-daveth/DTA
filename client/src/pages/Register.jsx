@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import { toast } from 'react-hot-toast';
+import axios from "axios"
+
 import { Link } from 'react-router-dom'
 
 const Register = () => {
@@ -8,12 +11,45 @@ const Register = () => {
     password: '',
     comfirmPassword: '',
   })
-
+  const [error, setError] = useState(false)
   const {name, email, password, comfirmPassword} = data
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault()
-    console.log(name, email, password)
+      if(name.length > 4){
+        if(email.length > 7){
+          if(comfirmPassword === password){
+            if(password.length > 6 ){
+              try {
+                await axios.get("http://localhost:8000/register").then((res)=> {
+                  const data = res.json();
+                  console.log("Data from backend", data)
+                })
+              } catch (error) {
+                toast.error("We could not sign you in try again in few seconfs", error)
+              }
+            }else{
+              setError(true)
+              toast.error("Your password is too short")
+            }
+        }else{
+          setError(true)
+         toast.error("Your password does not match")
+        }
+        }else{
+          setError(true)
+          setTimeout(() => {
+           setError(false)
+          }, 2000);
+          toast.error("Invalid email")
+        }
+      }else{
+        setError(true)
+        setTimeout(() => {
+         setError(false)
+        }, 2000);
+        toast.error("Invalid name")
+      }
   }
   return (
     <div className='bg-red-700 text-white'>
@@ -33,11 +69,19 @@ const Register = () => {
            </div>
            <div className="flex flex-col gap-2">
                 <label htmlFor="">Password</label>
-                <input type="text" className='h-[40px] text-gray-600 rounded-md px-3' placeholder='Input your password' value={data.password} onChange={e => setData({...data, password: e.target.value})} />
+                <input type="text"  className={`h-[40px] text-gray-600 rounded-md px-3 ${error && 'border-[3px] border-red-600'}`} placeholder='Input your password' value={data.password} onChange={e => {
+                   if(data.password.length >= 6){
+                    setError(false)
+                  }
+                  setData({...data, password: e.target.value})}} />
            </div>
            <div className="flex flex-col gap-2">
                 <label htmlFor="">Comfirm Password</label>
-                <input type="text" className='h-[40px] text-gray-600 rounded-md px-3' placeholder='Comfirm your password' value={data.comfirmPassword} onChange={e => setData({...data, comfirmPassword: e.target.value})} />
+                <input type="text" className={`h-[40px] text-gray-600 rounded-md px-3 ${error && 'border-[3px] border-red-600'}`} placeholder='Comfirm your password' value={data.comfirmPassword} onChange={e => {
+                    if(data.comfirmPassword === data.password){
+                      setError(false)
+                    }
+                   setData({...data, comfirmPassword: e.target.value})}} />
            </div>
            <div className="flex items-start justify-between">
                 <div className="flex flex-col gap-2">

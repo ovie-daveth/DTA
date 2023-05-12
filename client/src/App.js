@@ -8,7 +8,11 @@ import ProfilePage from './pages/ProfilePage';
 import Register from './pages/Register';
 import Home from './pages/Home';
 import { useLocation } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+// import axios from 'axios';
 
+// axios.defaults.baseURL = 'http://localhost:8000';
+// axios.defaults.withCredentials = true;
 function App() {
   const location = useLocation()
   return (
@@ -16,6 +20,31 @@ function App() {
       {
         location.pathname !== '/' && location.pathname !== '/register' && location.pathname !== '/forgot' ? (<Navbar />) : null
       }
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        gutter={8}
+        containerClassName=""
+        containerStyle={{}}
+        toastOptions={{
+        // Define default options
+        className: '',
+        duration: 5000,
+        style: {
+          background: '#363636',
+          color: '#fff',
+        },
+
+        // Default options for specific types
+        success: {
+          duration: 3000,
+          theme: {
+            primary: 'green',
+            secondary: 'black',
+          },
+        },
+      }}
+    />
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<Home />} />
