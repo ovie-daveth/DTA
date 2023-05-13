@@ -9,6 +9,7 @@ import Register from './pages/Register';
 import Home from './pages/Home';
 import { useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { ContextProvider } from './context/userContext';
 // import axios from 'axios';
 
 // axios.defaults.baseURL = 'http://localhost:8000';

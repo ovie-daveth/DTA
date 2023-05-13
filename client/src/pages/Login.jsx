@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { toast } from 'react-hot-toast'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const Login = () => {
   const [data, setData] = useState({
@@ -7,12 +9,31 @@ const Login = () => {
     password: '',
     isStayedIn: false
   })
+  const navigate = useNavigate()
 
   const {email, password, isStayedIn} = data
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault()
     console.log( email, password, isStayedIn)
+    try {
+      const response = await axios.post("http://localhost:3001/login", {
+        email, password
+      });
+      const data = response.data; // Access the response data using response.data
+      console.log("Data from backend", data);
+      if(data.error){
+        toast.error(data.error)
+      } else if(data.success){
+        setData({});
+        navigate("/home")
+        toast.success(data.success)
+      }
+    } catch (error) {
+      toast.error(
+        `We could not sign you in. Please try again in a few seconds, ${error.message}`
+      );
+    }
   }
   return (
     <div className='bg-red-700 h-screen text-white'>
@@ -24,11 +45,11 @@ const Login = () => {
         <div className="flex flex-col gap-4 font-semibold">
            <div className="flex flex-col gap-2">
                 <label htmlFor="">Email</label>
-                <input type="text" className='h-[40px] rounded-md px-3' placeholder='Input your email' value={data.email} onChange={e => setData({...data, email: e.target.value})} />
+                <input type="text" className='text-gray-600 h-[40px] rounded-md px-3' placeholder='Input your email' value={data.email} onChange={e => setData({...data, email: e.target.value})} />
            </div>
            <div className="flex flex-col gap-2">
                 <label htmlFor="">Password</label>
-                <input type="text" className='h-[40px] rounded-md px-3' placeholder='Input your password' value={data.password} onChange={e => setData({...data, password: e.target.value})} />
+                <input type="text" className='text-gray-600 h-[40px] rounded-md px-3' placeholder='Input your password' value={data.password} onChange={e => setData({...data, password: e.target.value})} />
            </div>
            <div className="flex flex-col md:flex-row  md:justify-between items-start m-auto md:m-[0]">
                 <div className="flex flex-col gap-2">

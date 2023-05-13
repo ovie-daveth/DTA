@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { toast } from 'react-hot-toast';
 import axios from "axios"
+import { useNavigate } from 'react-router-dom';
 
 import { Link } from 'react-router-dom'
 
@@ -12,45 +13,39 @@ const Register = () => {
     comfirmPassword: '',
   })
   const [error, setError] = useState(false)
-  const {name, email, password, comfirmPassword} = data
+  const navigate = useNavigate()
 
   const handleRegister = async (e) => {
-    e.preventDefault()
-      if(name.length > 4){
-        if(email.length > 7){
-          if(comfirmPassword === password){
-            if(password.length > 6 ){
-              try {
-                await axios.get("http://localhost:8000/register").then((res)=> {
-                  const data = res.json();
-                  console.log("Data from backend", data)
-                })
-              } catch (error) {
-                toast.error("We could not sign you in try again in few seconfs", error)
-              }
-            }else{
-              setError(true)
-              toast.error("Your password is too short")
-            }
-        }else{
-          setError(true)
-         toast.error("Your password does not match")
+    e.preventDefault();
+    const {name, email, password, comfirmPassword} = data
+      if(password === comfirmPassword){
+        try {
+          const response = await axios.post("http://localhost:3001/register", {
+            name, email, password
+          });
+          const data = response.data; // Access the response data using response.data
+          console.log("Data from backend", data);
+          if(data.error){
+            toast.error(data.error)
+          } else if(data.success){
+            setData({});
+            const Name = data.user.name.split(" ")
+            const displayName = Name[Name.length - 1]
+            // console.log("Display name", displayName)
+            toast.success(`${displayName}, you've been ${data.success}`)
+            navigate("/")
+          }
+        } catch (error) {
+          toast.error(
+            `We could not sign you in. Please try again in a few seconds, ${error.message}`
+          );
         }
-        }else{
-          setError(true)
-          setTimeout(() => {
-           setError(false)
-          }, 2000);
-          toast.error("Invalid email")
-        }
-      }else{
+      } else{
         setError(true)
-        setTimeout(() => {
-         setError(false)
-        }, 2000);
-        toast.error("Invalid name")
+        toast.error("Password does not match")
       }
-  }
+  };
+  
   return (
     <div className='bg-red-700 text-white'>
         <div className="flex flex-col gap-3 w-[80%] md:w-[30%] m-auto bg-black px-5">
