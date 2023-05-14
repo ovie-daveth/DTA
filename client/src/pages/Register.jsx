@@ -33,7 +33,7 @@ const Register = () => {
             const displayName = Name[Name.length - 1]
             // console.log("Display name", displayName)
             toast.success(`${displayName}, you've been ${data.success}`)
-            navigate("/")
+            navigate("/login")
           }
         } catch (error) {
           toast.error(

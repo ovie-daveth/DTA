@@ -96,13 +96,15 @@ const loginUser =  async(req, res) => {
     }
 }
 const profile = async (req, res) => {
-    const token = req.cookies
+    const token = req.cookies.token
     if(token){
         jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
-            if(err){
-                console.log(err)
-            } else{
-                res.json(user)
+            if (err) {
+                console.log(err);
+                // Handle the error, e.g., return an error response
+                return res.status(401).json({ error: 'Invalid token' });
+            } else {
+                res.json(user);
             }
         })
     }

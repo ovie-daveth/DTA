@@ -10,16 +10,14 @@ import Home from './pages/Home';
 import { useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { ContextProvider } from './context/userContext';
-// import axios from 'axios';
 
-// axios.defaults.baseURL = 'http://localhost:8000';
-// axios.defaults.withCredentials = true;
+
 function App() {
   const location = useLocation()
   return (
-    <>
+    <ContextProvider>
       {
-        location.pathname !== '/' && location.pathname !== '/register' && location.pathname !== '/forgot' ? (<Navbar />) : null
+        location.pathname !== '/login' && location.pathname !== '/register' && location.pathname !== '/forgot' ? (<Navbar />) : null
       }
       <Toaster
         position="top-center"
@@ -47,8 +45,8 @@ function App() {
       }}
     />
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="forgot" element={<ForgotPassword />} />
         <Route path="profile" element={<ProfilePage />} />
@@ -56,7 +54,7 @@ function App() {
      {
       location.pathname !== '/' ? ( <Footer />) : null
      }
-    </>
+    </ContextProvider>
   );
 }
 

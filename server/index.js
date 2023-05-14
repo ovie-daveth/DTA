@@ -7,17 +7,19 @@ const cookieParser = require("cookie-parser");
 
 const port = 3001;
 
+//Middlewares
 const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false}))
 
+
 const uri = process.env.MONGOOSE_URL
 
-mongoose.connect(uri).then(() => console.log("Connected")).catch(err => console.log("Error: ", err));
-
-
+mongoose.connect(uri)
+.then(() => console.log("Connected"))
+.catch(err => console.log("Error: ", err));
 
 
 app.use("/", require("./routes/authRoute"));
