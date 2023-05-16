@@ -7,11 +7,15 @@ import {BrowserRouter} from 'react-router-dom'
 import {configureStore} from "@reduxjs/toolkit"
 import { Provider } from 'react-redux';
 import user from './store/userSlice';
+import { apiSlide } from './store/apiSlice';
 
 const store = configureStore({
   reducer: {
-    user: user
-  }
+    user: user,
+    [apiSlide.reducerPath]: apiSlide.reducer,
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+  devTools: true,
 })
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

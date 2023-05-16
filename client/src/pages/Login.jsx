@@ -17,7 +17,7 @@ const Login = () => {
     e.preventDefault()
     console.log( email, password, isStayedIn)
     try {
-      const response = await axios.post("http://localhost:3001/login", {
+      const response = await axios.post("/login", {
         email, password
       });
       const data = response.data; // Access the response data using response.data
@@ -28,7 +28,7 @@ const Login = () => {
         setData({});
         navigate("/")
         toast.success(data.success)
-        console.log(data.user)
+        // console.log(data.user)
       }
     } catch (error) {
       toast.error(

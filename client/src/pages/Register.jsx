@@ -23,7 +23,7 @@ const Register = () => {
     const {name, email, password, comfirmPassword} = data
       if(password === comfirmPassword){
         try {
-          const response = await axios.post("http://localhost:3001/register", {
+          const response = await axios.post("/register", {
             name, email, password
           });
           const data = response.data; // Access the response data using response.data
@@ -37,9 +37,9 @@ const Register = () => {
             // console.log("Display name", displayName)
             toast.success(`${displayName}, you've been ${data.success}`)
             console.log(data.user)
-            const userData = {name: data.user.name, email: data.user.email, username: displayName, token: data.token}
-            localStorage.setItem('user', JSON.stringify(userData))
-            dispatch(login(userData))
+            // const userData = {name: data.user.name, email: data.user.email, username: displayName, token: data.token}
+            // localStorage.setItem('user', JSON.stringify(userData))
+            // dispatch(login(userData))
             navigate("/profile")
           }
         } catch (error) {

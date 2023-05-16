@@ -7,7 +7,13 @@ const initialState = {
   username: '',
   gender: '',
   token: '',
-  bio: ''
+  bio: '',
+  facebook: '', 
+  twitter: '',
+  linkedin: '', 
+  portfolio: '', 
+  joined: '', 
+  lastupdate: '',
 };
 
 const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));

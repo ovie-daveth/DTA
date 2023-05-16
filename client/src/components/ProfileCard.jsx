@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { BsFacebook, BsLinkedin, BsTwitter } from 'react-icons/bs'
 import { Link, useNavigate } from 'react-router-dom'
 import avatar from '../assets/avatarp.png'
-import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../store/userSlice'
+import axios from 'axios'
+import { toast } from 'react-hot-toast'
 
 const ProfileCard = ({showCard}) => {
+  const [users, setUser] = useState(null)
   const socials = [
     {
       id : 1,
@@ -23,16 +25,37 @@ const ProfileCard = ({showCard}) => {
       icons: <BsFacebook />
     }
   ]
-  const user = useSelector((store)=> store.user.value)
-  const dispatch = useDispatch()
 
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const response = await axios.get("/profile");
+        const user = response.data;
+        console.log(user);
+        const {name, email, location, bio, facebook, twitter,linkedin, portfolio, joined, lastupdate} = user
+        setUser(user);
+        console.log(name, email, location, bio, facebook, twitter, linkedin, portfolio)
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getUser();
+  }, []);
 
   const nav = useNavigate()
   const gotoCourse = () => {
     nav('/course')
   } 
-  const logoutFunction = () => {
-    dispatch(logout())
+  const logoutFunction = async () => {
+      try {
+         const response = await axios.post("/logout");
+         const data = response.data;
+         console.log(data.success);
+         toast.success(data.message)
+      } catch (error) {
+        console.log(error)
+      } 
       nav('/login')
   }
   return (
@@ -42,10 +65,10 @@ const ProfileCard = ({showCard}) => {
          </div>
           <div className="flex flex-col items-center">
               {
-                user && (
+                users && (
                   <>
-                    <h2 className="block text-md md:text-xl lg:text-xl font-bold">{user.name}</h2>
-                    <Link className='italic underline font-semibold text-red-700 hover:text-red-900' to="/">{user.username}</Link>
+                    <h2 className="block text-md md:text-xl lg:text-xl font-bold">{users.name}</h2>
+                    <Link className='italic underline font-semibold text-red-700 hover:text-red-900' to="/">{users.username}</Link>
                   </>
                 )
               }
