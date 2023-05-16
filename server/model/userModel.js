@@ -6,9 +6,48 @@ const userSchema = new Schema({
     email: {
         type: String,
         unique: true,
+        required: true
     },
-    password: String
-})
+    password: {
+        type: String,
+        required: true,
+    },
+    imgUrl: {
+        type: String,
+    },
+    location: {
+        type: String,
+        default: ''
+    },
+    bio:  {
+        type: String,
+        default: ''
+    },
+    portfolio: {
+        type: String,
+        default: ''
+    },
+    link: {
+        type: {
+          facebook: {
+            type: String,
+            default: ''
+          },
+          twitter: {
+            type: String,
+            default: ''
+          },
+          linkedin: {
+            type: String,
+            default: ''
+          }
+        },
+        default: {}
+      }
+},
+{
+    timestamps: true,
+});
 
 const UserModel = mongoose.model('user', userSchema)
 module.exports = UserModel
