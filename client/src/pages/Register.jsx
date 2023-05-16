@@ -2,10 +2,13 @@ import React, { useState } from 'react'
 import { toast } from 'react-hot-toast';
 import axios from "axios"
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import { Link } from 'react-router-dom'
+import { login } from '../store/userSlice';
 
 const Register = () => {
+  const dispatch = useDispatch()
   const [data, setData] = useState({
     name: '',
     email: '',
@@ -33,7 +36,11 @@ const Register = () => {
             const displayName = Name[Name.length - 1]
             // console.log("Display name", displayName)
             toast.success(`${displayName}, you've been ${data.success}`)
-            navigate("/login")
+            console.log(data.user)
+            const userData = {name: data.user.name, email: data.user.email, username: displayName, token: data.token}
+            localStorage.setItem('user', JSON.stringify(userData))
+            dispatch(login(userData))
+            navigate("/profile")
           }
         } catch (error) {
           toast.error(

@@ -9,15 +9,13 @@ const ProfilePage = () => {
     setShowCard(!showCard)
   }
   return (
-    <div className='ml-[110px] relative flex items-start text-black'>
-     <div className="flex absolute">
-        <ProfileCard showCard={showCard} />
-        <span onClick={handleProfile } className='text-xl'><MdMenu /></span>
-     </div>
-      <div className="block absolute right-0">
-        <ProfileForm />
+    <>
+      <span onClick={handleProfile } className='lg:text-3xl md:text-2xl absolute top-0 left-28'><MdMenu /></span>
+      <div className={`ml-[110px] flex items-start text-black `}>
+          <ProfileCard showCard={showCard} />
+          <ProfileForm showCard={showCard} />
       </div>
-    </div>
+    </>
   )
 }
 

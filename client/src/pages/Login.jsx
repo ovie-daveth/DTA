@@ -28,6 +28,7 @@ const Login = () => {
         setData({});
         navigate("/")
         toast.success(data.success)
+        console.log(data.user)
       }
     } catch (error) {
       toast.error(

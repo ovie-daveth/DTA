@@ -9,13 +9,12 @@ import Register from './pages/Register';
 import Home from './pages/Home';
 import { useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { ContextProvider } from './context/userContext';
 
 
 function App() {
   const location = useLocation()
   return (
-    <ContextProvider>
+    <>
       {
         location.pathname !== '/login' && location.pathname !== '/register' && location.pathname !== '/forgot' ? (<Navbar />) : null
       }
@@ -54,7 +53,7 @@ function App() {
      {
       location.pathname !== '/' ? ( <Footer />) : null
      }
-    </ContextProvider>
+    </>
   );
 }
 
